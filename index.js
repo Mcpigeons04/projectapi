@@ -1,4 +1,72 @@
 // index.js
+// const express = require('express');
+// const axios = require('axios');
+// const cors = require('cors');
+
+// const app = express();
+// const PORT = process.env.PORT || 3000;
+
+// const NEWS_API_KEY =process.env.NEWS_API_KEY;
+// const BASE_URL = 'https://newsapi.org/v2';
+
+// app.use(cors());
+// app.use(express.json());
+
+// app.get('/', (req, res) => {
+//   res.send('Welcome to the News API');
+// });
+
+// app.get('/news', async (req, res) => {
+//   try {
+//     const response = await axios.get(`${BASE_URL}/top-headlines`, {
+//       params: { apiKey: NEWS_API_KEY, language: 'en' },
+//     });
+//     res.json(response.data);
+//   } catch (error) {
+//     res.status(500).json({ error: 'Error fetching news' });
+//   }
+// });
+
+// app.get('/news/:category', async (req, res) => {
+//   const category = req.params.category;
+//   try {
+//     const response = await axios.get(`${BASE_URL}/top-headlines`, {
+//       params: { apiKey: NEWS_API_KEY, language: 'en', category },
+//     });
+//     res.json(response.data);
+//   } catch (error) {
+//     res.status(500).json({ error: 'Error fetching news' });
+//   }
+// });
+
+// app.get('/news/country/:country', async (req, res) => {
+//   const country = req.params.country;
+//   try {
+//     const response = await axios.get(`${BASE_URL}/top-headlines`, {
+//       params: { apiKey: NEWS_API_KEY, language: 'en', country },
+//     });
+//     res.json(response.data);
+//   } catch (error) {
+//     res.status(500).json({ error: 'Error fetching news' });
+//   }
+// });
+
+// app.get('/news/search', async (req, res) => {
+//   const query = req.query.q;
+//   try {
+//     const response = await axios.get(`${BASE_URL}/everything`, {
+//       params: { apiKey: NEWS_API_KEY, q: query, language: 'en' },
+//     });
+//     res.json(response.data);
+//   } catch (error) {
+//     res.status(500).json({ error: 'Error fetching news' });
+//   }
+// });
+
+// app.listen(PORT, () => {
+//   console.log(`Server is running on port ${PORT}`);
+// });
+
 const express = require('express');
 const axios = require('axios');
 const cors = require('cors');
@@ -6,7 +74,7 @@ const cors = require('cors');
 const app = express();
 const PORT = process.env.PORT || 3000;
 
-const NEWS_API_KEY =process.env.NEWS_API_KEY;
+const NEWS_API_KEY = process.env.NEWS_API_KEY; // Ensure this is set in Render
 const BASE_URL = 'https://newsapi.org/v2';
 
 app.use(cors());
@@ -17,45 +85,16 @@ app.get('/', (req, res) => {
 });
 
 app.get('/news', async (req, res) => {
+  const { country, category, page, pageSize } = req.query;
   try {
     const response = await axios.get(`${BASE_URL}/top-headlines`, {
-      params: { apiKey: NEWS_API_KEY, language: 'en' },
-    });
-    res.json(response.data);
-  } catch (error) {
-    res.status(500).json({ error: 'Error fetching news' });
-  }
-});
-
-app.get('/news/:category', async (req, res) => {
-  const category = req.params.category;
-  try {
-    const response = await axios.get(`${BASE_URL}/top-headlines`, {
-      params: { apiKey: NEWS_API_KEY, language: 'en', category },
-    });
-    res.json(response.data);
-  } catch (error) {
-    res.status(500).json({ error: 'Error fetching news' });
-  }
-});
-
-app.get('/news/country/:country', async (req, res) => {
-  const country = req.params.country;
-  try {
-    const response = await axios.get(`${BASE_URL}/top-headlines`, {
-      params: { apiKey: NEWS_API_KEY, language: 'en', country },
-    });
-    res.json(response.data);
-  } catch (error) {
-    res.status(500).json({ error: 'Error fetching news' });
-  }
-});
-
-app.get('/news/search', async (req, res) => {
-  const query = req.query.q;
-  try {
-    const response = await axios.get(`${BASE_URL}/everything`, {
-      params: { apiKey: NEWS_API_KEY, q: query, language: 'en' },
+      params: {
+        apiKey: NEWS_API_KEY,
+        country: country || 'us',
+        category: category || 'general',
+        page: page || 1,
+        pageSize: pageSize || 20
+      }
     });
     res.json(response.data);
   } catch (error) {
@@ -66,3 +105,4 @@ app.get('/news/search', async (req, res) => {
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
 });
+
